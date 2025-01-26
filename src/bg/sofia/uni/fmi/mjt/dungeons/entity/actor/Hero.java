@@ -14,4 +14,5 @@ public class Hero extends Character {
                 Weapon weapon) {
         super(name, stats, spell, weapon);
     }
+
 }

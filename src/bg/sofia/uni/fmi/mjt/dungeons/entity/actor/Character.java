@@ -3,7 +3,7 @@ package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
-public class Character implements Actor {
+public abstract class Character implements Actor {
     private final String name;
     private Stats stats;
     private Spell spell;
@@ -15,5 +15,30 @@ public class Character implements Actor {
         this.stats = stats;
         this.spell = spell;
         this.weapon = weapon;
+    }
+
+    @Override
+    public void equip(Weapon weapon) {
+
+    }
+
+    @Override
+    public void learn(Spell spell) {
+
+    }
+
+    @Override
+    public void takeHealing(Integer amount) {
+
+    }
+
+    @Override
+    public void takeDamage(Integer amount) {
+
+    }
+
+    @Override
+    public boolean isAlive() {
+        return stats.health() > 0;
     }
 }

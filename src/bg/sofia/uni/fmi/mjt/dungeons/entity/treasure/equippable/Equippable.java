@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable;
 
-public abstract class Equippable {
+import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
+
+public abstract class Equippable implements Treasure {
 
 }
