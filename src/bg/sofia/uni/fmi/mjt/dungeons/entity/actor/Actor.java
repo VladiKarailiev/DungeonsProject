@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Direction;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
@@ -47,4 +48,12 @@ public interface Actor {
      * @return if the Actor is alive
      */
     boolean isAlive();
+
+    /**
+     * Moves the Actor in a direction
+     * @param direction the direction of the move
+     * @return if the Actor is alive
+     * @throws IllegalArgumentException if the direction is null
+     */
+    boolean move(Direction direction);
 }
