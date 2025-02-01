@@ -1,6 +1,5 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.treasure;
 
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 
 public interface Treasure {

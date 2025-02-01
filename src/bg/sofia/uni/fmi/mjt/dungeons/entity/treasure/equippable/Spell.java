@@ -8,14 +8,23 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 
 public class Spell extends Equippable {
+
+    private int manaCost;
+
+    public Spell(String name, int damage, int manaCost) {
+        super(name, damage);
+        this.manaCost = manaCost;
+    }
+
     @Override
     public void consume(Hero hero) {
-
+        hero.learn(this);
+        System.out.println("Hero tries to learn this spell");
     }
 
     @Override
     public void accept(Visitor visitor) {
-
+        visitor.visitTreasure(this);
     }
 
     @Override
@@ -25,7 +34,7 @@ public class Spell extends Equippable {
 
     @Override
     public void visitCharacter(Character character) {
-
+        consume((Hero) character);
         System.out.println("Spell interacts with character:" + character.toString());
     }
 

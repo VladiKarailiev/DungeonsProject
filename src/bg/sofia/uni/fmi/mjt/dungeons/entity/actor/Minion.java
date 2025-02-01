@@ -1,6 +1,5 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Direction;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.EmptySpace;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Obstacle;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
@@ -11,11 +10,6 @@ public class Minion extends Enemy {
     public Minion(String name, Stats stats, Spell spell,
                   Weapon weapon) {
         super(name, stats, spell, weapon);
-    }
-
-    @Override
-    public boolean move(Direction direction) {
-        return false;
     }
 
     @Override

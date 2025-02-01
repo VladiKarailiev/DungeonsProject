@@ -8,49 +8,14 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Character;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 
-public class Potion extends Entity implements Treasure {
-    private final Integer amount;
+public abstract class Potion extends Entity implements Treasure {
+    protected final Integer amount;
 
     public Potion(Integer amount) {
         this.amount = amount;
     }
 
-    @Override
-    public void consume(Hero hero) {
+    public abstract  void consume(Hero hero);
 
-    }
 
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitTreasure(this);
-    }
-
-    @Override
-    public char toChar() {
-        return 'P';
-    }
-
-    @Override
-    public void visitCharacter(Character character) {
-
-        System.out.println("Potion interacts with character:" + character.toString());
-    }
-
-    @Override
-    public void visitTreasure(Treasure treasure) {
-
-        System.out.println("Potion interacts with treasure:" + treasure.toString());
-    }
-
-    @Override
-    public void visitEmptySpace(EmptySpace emptySpace) {
-
-        System.out.println("Potion interacts with emptySpace:" + emptySpace.toString());
-    }
-
-    @Override
-    public void visitObstacle(Obstacle obstacle) {
-        System.out.println("Potion interacts with obstacle:" + obstacle.toString());
-
-    }
 }

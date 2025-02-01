@@ -21,22 +21,34 @@ public abstract class Character extends Entity implements Actor {
 
     @Override
     public void equip(Weapon weapon) {
-
+        if (this.weapon == null || weapon.getDamage() > this.weapon.getDamage()) {
+            this.weapon = weapon;
+        }
     }
 
     @Override
-    public void learn(Spell spell) {
-
+    public void learn(Spell spell) { // trqq da checkvam dali imam dostatuchno mana
+        if ((this.spell == null || spell.getDamage() > this.spell.getDamage())) {
+            this.spell = spell;
+        }
     }
 
     @Override
     public void takeHealing(Integer amount) {
+        stats = new Stats(stats.health() + amount, stats.mana(), stats.attack(), stats.defense());
+    }
 
+    @Override
+    public void takeMana(Integer amount) {
+
+        stats = new Stats(stats.health(), stats.mana() + amount, stats.attack(), stats.defense());
     }
 
     @Override
     public void takeDamage(Integer amount) {
 
+        stats = new Stats(stats.health() - amount, stats.mana(), stats.attack(), stats.defense());
+        // tuka moje bi nqkuv check dali e umrql
     }
 
     @Override

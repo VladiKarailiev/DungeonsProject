@@ -20,19 +20,15 @@ public class Hero extends Character {
     }
 
     @Override
-    public boolean move(Direction direction) {
-        return false;
-    }
-
-
-    @Override
     public void visitCharacter(Character character) {
-        System.out.println("Hero:"+ this.toString() + " interacts with another character:" + character.toString());
+        System.out.println("Hero:" + this.toString() + " interacts with another character:" + character.toString());
     }
 
     @Override
     public void visitTreasure(Treasure treasure) {
-        System.out.println("Hero interacts with treasure");
+        // provide option to store
+        treasure.consume(this);
+        System.out.println("Hero interacts with treasure:" + treasure.toString());
 
     }
 

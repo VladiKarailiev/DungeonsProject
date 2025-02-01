@@ -1,7 +1,5 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Direction;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
@@ -35,6 +33,15 @@ public interface Actor {
     void takeHealing(Integer amount);
 
     /**
+     * Adds mana points to Actor
+     *
+     * @param amount the amount to be added
+     * @return nothing
+     * @throws IllegalArgumentException if the amount is not in [0,1000]
+     */
+    void takeMana(Integer amount);
+
+    /**
      * Applies damage to Actor
      *
      * @param amount the amount to be applied
@@ -49,13 +56,4 @@ public interface Actor {
      * @return if the Actor is alive
      */
     boolean isAlive();
-
-    /**
-     * Moves the Actor in a direction
-     * @param direction the direction of the move
-     * @return if the Actor is alive
-     * @throws IllegalArgumentException if the direction is null
-     */
-    boolean move(Direction direction);
-
 }
