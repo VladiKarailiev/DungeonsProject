@@ -1,10 +1,11 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Direction;
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
-public interface Actor {
+public interface Actor extends Entity {
 
     /**
      * Tries to assign a weapon to Actor
@@ -56,4 +57,5 @@ public interface Actor {
      * @throws IllegalArgumentException if the direction is null
      */
     boolean move(Direction direction);
+
 }

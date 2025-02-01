@@ -1,9 +1,10 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
-public abstract class Character implements Actor {
+public abstract class Character implements Actor, Visitor {
     private final String name;
     private Stats stats;
     private Spell spell;
@@ -40,5 +41,10 @@ public abstract class Character implements Actor {
     @Override
     public boolean isAlive() {
         return stats.health() > 0;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitCharacter(this);
     }
 }

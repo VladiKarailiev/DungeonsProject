@@ -1,5 +1,5 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity;
 
-public abstract class Entity {
-
+public interface Entity {
+    void accept(Visitor visitor);
 }
