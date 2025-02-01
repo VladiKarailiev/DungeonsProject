@@ -5,7 +5,7 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
-public interface Actor extends Entity {
+public interface Actor {
 
     /**
      * Tries to assign a weapon to Actor

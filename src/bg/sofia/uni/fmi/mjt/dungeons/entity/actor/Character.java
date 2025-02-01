@@ -1,10 +1,11 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
-public abstract class Character implements Actor, Visitor {
+public abstract class Character extends Entity implements Actor {
     private final String name;
     private Stats stats;
     private Spell spell;

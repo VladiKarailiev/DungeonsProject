@@ -45,4 +45,9 @@ public class Hero extends Character {
     public void visitObstacle(Obstacle obstacle) {
         System.out.println("Hero interacts with obstacle");
     }
+
+    @Override
+    public char toChar() {
+        return 'H';
+    }
 }

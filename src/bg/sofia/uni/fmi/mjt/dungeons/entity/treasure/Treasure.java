@@ -1,10 +1,9 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.treasure;
 
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 
-public interface Treasure extends Entity, Visitor {
+public interface Treasure {
     /**
      * Treasure is consumed by a hero.
      * Depending on the treasure type it has different implementations.

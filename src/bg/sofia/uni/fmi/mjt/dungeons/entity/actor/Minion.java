@@ -42,4 +42,9 @@ public class Minion extends Enemy {
         System.out.println("Minion interacts with obstacle:" + obstacle.toString());
 
     }
+
+    @Override
+    public char toChar() {
+        return 'M';
+    }
 }

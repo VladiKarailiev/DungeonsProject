@@ -3,10 +3,15 @@ package bg.sofia.uni.fmi.mjt.dungeons.entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Character;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 
-public class Obstacle implements Entity, Visitor {
+public class Obstacle extends Entity {
     @Override
     public void accept(Visitor visitor) {
         visitor.visitObstacle(this);
+    }
+
+    @Override
+    public char toChar() {
+        return '#';
     }
 
     @Override
