@@ -19,6 +19,14 @@ public abstract class Character extends Entity implements Actor {
         this.weapon = weapon;
     }
 
+    public boolean fightWith(Character character) {
+        while (character.isAlive() && isAlive()) {
+            character.takeDamage(stats.attack());
+            if (character.isAlive()) takeDamage(character.stats.attack());
+        }
+        return isAlive();
+    }
+
     @Override
     public void equip(Weapon weapon) {
         if (this.weapon == null || weapon.getDamage() > this.weapon.getDamage()) {

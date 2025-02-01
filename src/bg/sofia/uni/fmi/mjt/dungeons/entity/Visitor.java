@@ -10,7 +10,4 @@ public interface Visitor {
 
     void visitTreasure(Treasure treasure);
 
-    void visitEmptySpace(EmptySpace emptySpace);
-
-    void visitObstacle(Obstacle obstacle);
 }

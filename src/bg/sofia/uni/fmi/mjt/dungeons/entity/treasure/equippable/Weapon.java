@@ -1,7 +1,5 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable;
 
-import bg.sofia.uni.fmi.mjt.dungeons.entity.EmptySpace;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Obstacle;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Character;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
@@ -41,15 +39,4 @@ public class Weapon extends Equippable {
         System.out.println("Weapon interacts with treasure:" + treasure.toString());
     }
 
-    @Override
-    public void visitEmptySpace(EmptySpace emptySpace) {
-
-        System.out.println("Weapon interacts with emptySpace:" + emptySpace.toString());
-    }
-
-    @Override
-    public void visitObstacle(Obstacle obstacle) {
-
-        System.out.println("Weapon interacts with obstacle:" + obstacle.toString());
-    }
 }

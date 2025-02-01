@@ -1,9 +1,5 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Direction;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.EmptySpace;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Obstacle;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
@@ -21,7 +17,10 @@ public class Hero extends Character {
 
     @Override
     public void visitCharacter(Character character) {
-        System.out.println("Hero:" + this.toString() + " interacts with another character:" + character.toString());
+        //provide options
+        boolean fightResult = fightWith(character);
+        //tva moje i da trqq da se iznese
+        System.out.println("Hero interacts with another character and the result is: " + fightResult);
     }
 
     @Override
@@ -30,16 +29,6 @@ public class Hero extends Character {
         treasure.consume(this);
         System.out.println("Hero interacts with treasure:" + treasure.toString());
 
-    }
-
-    @Override
-    public void visitEmptySpace(EmptySpace emptySpace) {
-        System.out.println("Hero interacts with treasure");
-    }
-
-    @Override
-    public void visitObstacle(Obstacle obstacle) {
-        System.out.println("Hero interacts with obstacle");
     }
 
     @Override

@@ -1,10 +1,6 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.potion;
 
-import bg.sofia.uni.fmi.mjt.dungeons.entity.EmptySpace;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Obstacle;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Character;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 

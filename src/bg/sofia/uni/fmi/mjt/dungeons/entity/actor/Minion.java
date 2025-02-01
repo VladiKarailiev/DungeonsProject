@@ -1,7 +1,5 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
-import bg.sofia.uni.fmi.mjt.dungeons.entity.EmptySpace;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Obstacle;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
@@ -15,26 +13,15 @@ public class Minion extends Enemy {
     @Override
     public void visitCharacter(Character character) {
 
-        System.out.println("Minion interacts with character" + character.toString());
+        boolean fightResult = fightWith(character);
+        //tva moje i da trqq da se iznese
+        System.out.println("Minion interacts with another character and the result is: " + fightResult);
     }
 
     @Override
     public void visitTreasure(Treasure treasure) {
 
         System.out.println("Minion interacts with treasure" + treasure.toString());
-    }
-
-    @Override
-    public void visitEmptySpace(EmptySpace emptySpace) {
-
-        System.out.println("Minion interacts with empty space:" + emptySpace.toString());
-
-    }
-
-    @Override
-    public void visitObstacle(Obstacle obstacle) {
-        System.out.println("Minion interacts with obstacle:" + obstacle.toString());
-
     }
 
     @Override
