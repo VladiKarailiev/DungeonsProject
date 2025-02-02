@@ -52,12 +52,13 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private void handleCommand(String inputLine) {
-        if (inputLine.equals("m")) {
-            engine.moveEntity(currPosition, new Position(2, 2));
-            currPosition = new Position(2, 2);
+    private void handleCommand(String inputLine) { // tuka command pattern i builder pattern
+        String[] parts = inputLine.split(" ");
+        if (parts[0].equals("move")) {
+            engine.moveEntity(currPosition, new Position(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])));
+            currPosition = new Position(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
         }
-        if (inputLine.equals("d")) engine.printMap();
+        if (parts[0].equals("print")) engine.printMap();
     }
 
 }
