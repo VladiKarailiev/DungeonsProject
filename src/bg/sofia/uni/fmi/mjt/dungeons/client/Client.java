@@ -35,8 +35,11 @@ public class Client implements GameClientAPI {
                 }
                 System.out.println("Sending message <" + message + "> to the server...");
                 writer.println(message);
-                String reply = reader.readLine(); // read the response from the server
-                System.out.println("The server replied <" + reply + ">");
+                char[] buff = new char[1024];
+                reader.read(buff); // read the response from the server
+                for (int i = 0; i < buff.length; i++) {
+                    System.out.print(buff[i]);
+                }
                 /* do tuka--------------------------------------------------*/
             }
 

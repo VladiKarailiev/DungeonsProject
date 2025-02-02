@@ -1,3 +1,4 @@
+
 package bg.sofia.uni.fmi.mjt.dungeons.server;
 
 import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
@@ -28,20 +29,13 @@ public class GameServer implements GameServerAPI {
             Socket clientSocket;
 
             while (true) {
-                // Calling accept() blocks and waits for connection request by a client
-                // When a request comes, accept() returns a socket to communicate with this
-                // client
                 clientSocket = serverSocket.accept();
 
                 System.out.println("Accepted connection request from client " + clientSocket.getInetAddress());
 
-                // We want each client to be processed in a separate thread
-                // to keep the current thread free to accept() requests from new clients
                 ClientHandler clientHandler = new ClientHandler(clientSocket, engine);
 
-                // uncomment the line below to launch a thread manually
-                // new Thread(clientHandler).start();
-                executor.execute(clientHandler); // use a thread pool to launch a thread
+                executor.execute(clientHandler);
             }
         } catch (IOException e) {
             throw new RuntimeException("There is a problem with the server socket", e);
@@ -60,5 +54,5 @@ public class GameServer implements GameServerAPI {
 }
 
 /*
-    TODO: LOADVA MAP OT FILE!
+    TO DO: LOADVA MAP OT FILE!
  */

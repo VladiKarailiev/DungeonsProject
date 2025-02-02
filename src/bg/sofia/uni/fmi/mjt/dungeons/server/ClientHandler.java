@@ -1,6 +1,7 @@
 package bg.sofia.uni.fmi.mjt.dungeons.server;
 
 import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
@@ -28,7 +29,7 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
 
-        Thread.currentThread().setName("Client Request Handler for " + socket.getRemoteSocketAddress());
+        Thread.currentThread().setName("Client Handler for " + socket.getRemoteSocketAddress());
 
         try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true); // autoflush on
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
@@ -37,7 +38,7 @@ public class ClientHandler implements Runnable {
             while ((inputLine = in.readLine()) != null) { // read the message from the client
                 System.out.println("Message received from client: " + inputLine);
                 handleCommand(inputLine);
-                out.println("Echo " + inputLine); // send response back to the client
+                out.println(engine.getStringifiedMap()); // send response back to the client
             }
 
         } catch (IOException e) {

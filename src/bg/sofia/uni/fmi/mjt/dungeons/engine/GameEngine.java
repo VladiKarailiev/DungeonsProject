@@ -49,6 +49,18 @@ public class GameEngine {
         return map;
     }
 
+    public String getStringifiedMap() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < MAP_SIZE; i++) {
+            for (int j = 0; j < MAP_SIZE; j++) {
+                if (map[i][j] == null) sb.append('*');
+                else sb.append(map[i][j].toChar());
+            }
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
+
     public void printMap() {
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
