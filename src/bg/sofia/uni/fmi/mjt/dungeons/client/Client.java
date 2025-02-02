@@ -13,6 +13,7 @@ public class Client implements GameClientAPI {
 
 
     private static final int SERVER_PORT = 8008;
+    private static final int BUFFER_SIZE = 1024;
 
     @Override
     public void connect() {
@@ -22,25 +23,22 @@ public class Client implements GameClientAPI {
              Scanner scanner = new Scanner(System.in)) {
 
             Thread.currentThread().setName("Echo client thread " + socket.getLocalPort());
-
             System.out.println("Connected to the server.");
-
             /* ot tuka nadolu v dr method ------------------------------*/
             while (true) {
                 System.out.print("Enter message: ");
-                String message = scanner.nextLine(); // read a line from the console
+                String message = scanner.nextLine();
 
                 if ("quit".equals(message)) {
                     quit();
                 }
                 System.out.println("Sending message <" + message + "> to the server...");
                 writer.println(message);
-                char[] buff = new char[1024];
-                reader.read(buff); // read the response from the server
-                for (int i = 0; i < buff.length; i++) {
-                    System.out.print(buff[i]);
-                }
-                /* do tuka--------------------------------------------------*/
+
+                char[] buff = new char[BUFFER_SIZE]; // she se smenq
+                int charsRead = reader.read(buff); // read the response from the server
+                String map = new String(buff, 0, charsRead); // Only use the valid portion
+                System.out.print(map);
             }
 
         } catch (IOException e) {

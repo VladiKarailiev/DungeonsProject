@@ -62,13 +62,7 @@ public class GameEngine {
     }
 
     public void printMap() {
-        for (int i = 0; i < MAP_SIZE; i++) {
-            for (int j = 0; j < MAP_SIZE; j++) {
-                if (map[i][j] == null) System.out.print('*');
-                else System.out.print(map[i][j].toChar());
-            }
-            System.out.println();
-        }
+        System.out.print(getStringifiedMap());
     }
 
 }
