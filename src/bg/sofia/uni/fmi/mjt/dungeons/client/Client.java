@@ -8,62 +8,31 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class Client implements GameClientAPI {
+public class Client {
 
 
-    private static final int SERVER_PORT = 8008;
+    static final int SERVER_PORT = 8008;
     private static final int BUFFER_SIZE = 1024;
+    private static final int MAX_EXECUTOR_THREADS = 2;
 
-    @Override
-    public void connect() {
-        try (Socket socket = new Socket("localhost", SERVER_PORT);
-             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true); // autoflush on
-             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             Scanner scanner = new Scanner(System.in)) {
+    public static void main(String[] args) {
 
-            Thread.currentThread().setName("Echo client thread " + socket.getLocalPort());
-            System.out.println("Connected to the server.");
-            /* ot tuka nadolu v dr method ------------------------------*/
-            while (true) {
-                System.out.print("Enter message: ");
-                String message = scanner.nextLine();
+        Thread.currentThread().setName("Client Thread");
 
-                if ("quit".equals(message)) {
-                    quit();
-                }
-                System.out.println("Sending message <" + message + "> to the server...");
-                writer.println(message);
+        Client test = new Client();
 
-                char[] buff = new char[BUFFER_SIZE]; // she se smenq
-                int charsRead = reader.read(buff); // read the response from the server
-                String map = new String(buff, 0, charsRead); // Only use the valid portion
-                System.out.print(map);
-            }
+        try (ExecutorService executor = Executors.newFixedThreadPool(MAX_EXECUTOR_THREADS)) {
 
-        } catch (IOException e) {
-            throw new RuntimeException("There is a problem with the network communication", e);
+            CommandSender commandSender = new CommandSender();
+            MapVisualizer mapVisualizer = new MapVisualizer();
+            executor.execute(commandSender);
+            executor.execute(mapVisualizer);
         }
     }
 
-    @Override
-    public void quit() {
-
-    }
-
-    @Override
-    public void move(Direction dir) {
-
-    }
-
-    @Override
-    public void displayMap() { // da se dobavi klas mapvisualizer!
-
-    }
-
-    public static void main(String[] args) {
-        Client test = new Client();
-        test.connect();
-
+    private void startMapVisualizer() {
     }
 }

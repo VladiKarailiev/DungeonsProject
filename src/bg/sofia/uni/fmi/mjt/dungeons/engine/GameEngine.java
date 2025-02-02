@@ -3,12 +3,17 @@ package bg.sofia.uni.fmi.mjt.dungeons.engine;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameEngine {
 
     private static final int MAP_SIZE = 5;
+    private static final List<Position> SPAWN_POSITIONS = List.of(new Position(0, 0), new Position(4, 4));
 
     private Entity[][] map = new Entity[MAP_SIZE][MAP_SIZE];
     private Boolean[][] obstacles = new Boolean[MAP_SIZE][MAP_SIZE];
+
 
     private static GameEngine singleInstance = null;
 
@@ -17,7 +22,7 @@ public class GameEngine {
     }
 
     public Position getNextFreeSpawn() {
-        return new Position(1, 1);
+        return SPAWN_POSITIONS.stream().filter( q -> map[q.x()][q.y()] == null && isObstacle(q)).findAny().get();
     }
 
     public static GameEngine getInstance() {
@@ -42,7 +47,7 @@ public class GameEngine {
     }
 
     private boolean isObstacle(Position target) {
-        return false;
+        return obstacles[target.x()][target.y()] == null || obstacles[target.x()][target.y()] == false;
     }
 
     public Entity[][] getMap() {
@@ -51,9 +56,11 @@ public class GameEngine {
 
     public String getStringifiedMap() {
         StringBuilder sb = new StringBuilder();
+        sb.append(System.lineSeparator());
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
                 if (map[i][j] == null) sb.append('*');
+                //else if (isObstacle(new Position(i, j))) sb.append('#');
                 else sb.append(map[i][j].toChar());
             }
             sb.append(System.lineSeparator());
@@ -67,6 +74,6 @@ public class GameEngine {
 
 }
 /***
- * TODO: MOJE DA E SINGLETON?
+ * TODO: MOJE DA E SINGLETON? done
  * TODO: SBIH SE  SUS SEBE SI ???
  */

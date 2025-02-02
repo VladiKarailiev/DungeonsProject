@@ -9,17 +9,15 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class ClientHandler implements Runnable {
 
-    private Socket socket;
+    private ClientSession clientSession;
     private GameEngine engine;
     private Position currPosition;
 
-    public ClientHandler(Socket socket, GameEngine engine) {
-        this.socket = socket;
+    public ClientHandler(ClientSession clientSession, GameEngine engine) {
+        this.clientSession = clientSession;
         this.engine = engine;
         currPosition = engine.getNextFreeSpawn();
         /// tva she trqq se izmisli kak da idva ot client-a
@@ -29,24 +27,30 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
 
-        Thread.currentThread().setName("Client Handler for " + socket.getRemoteSocketAddress());
+        Thread.currentThread().setName("Client Handler for " + clientSession.commandSocket().getRemoteSocketAddress());
 
-        try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true); // autoflush on
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(
+            clientSession.commandSocket().getInputStream()))) {
 
             String inputLine;
-            while ((inputLine = in.readLine()) != null) { // read the message from the client
+            while ((inputLine = in.readLine()) != null) {
+
                 System.out.println("Message received from client: " + inputLine);
                 handleCommand(inputLine);
-                out.println(engine.getStringifiedMap()); // send response back to the client
+                synchronized (engine) {
+                    engine.notifyAll();
+                }
             }
 
         } catch (IOException e) {
+
             System.out.println(e.getMessage());
         } finally {
             try {
-                socket.close();
+
+                clientSession.commandSocket().close();
             } catch (IOException e) {
+
                 e.printStackTrace();
             }
         }
@@ -63,3 +67,7 @@ public class ClientHandler implements Runnable {
     }
 
 }
+
+/*
+    TODO: IMA BUG NE CHETE KOMANDI FSR
+ */
