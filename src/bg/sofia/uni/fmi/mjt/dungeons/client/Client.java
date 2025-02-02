@@ -56,12 +56,13 @@ public class Client implements GameClientAPI {
     }
 
     @Override
-    public void displayMap() {
+    public void displayMap() { // da se dobavi klas mapvisualizer!
 
     }
 
     public static void main(String[] args) {
         Client test = new Client();
         test.connect();
+
     }
 }

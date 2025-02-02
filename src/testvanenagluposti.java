@@ -1,8 +1,11 @@
+import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Minion;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
+import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
 @SuppressWarnings("checkstyle:TypeName")
 public class testvanenagluposti {
@@ -18,8 +21,8 @@ public class testvanenagluposti {
     }
 
     public static void main(String[] args) {
+        /*
         Entity[][] map = new Entity[6][6];
-
         Stats stats = new Stats(100, 50, 2, 3);
         Stats stats2 = new Stats(20, 50, 2, 3);
         map[1][1] = new Hero("pich", stats, null, null);
@@ -29,6 +32,14 @@ public class testvanenagluposti {
         map[4][4] = new Minion("neshtastnik", stats2, null, null);
         map[1][1].accept(map[4][4]);
         printmap(map);
+        */
+
+        GameEngine engine = GameEngine.getInstance();
+        engine.addEntity(new Position(1, 1), new Hero("Pich", new Stats(1, 2, 3, 4), null, null));
+        engine.addEntity(new Position(1, 2), new Weapon("Sabq", 10));
+        engine.printMap();
+        engine.moveEntity(new Position(1,1), new Position(1,2));
+        engine.printMap();
     }
 }
 

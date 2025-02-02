@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.dungeons.server;
 
+import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,9 +13,13 @@ public class GameServer implements GameServerAPI {
     private static final int SERVER_PORT = 8008;
     private static final int MAX_EXECUTOR_THREADS = 10;
 
+    private GameEngine engine;
+
     @Override
     public void start() {
         Thread.currentThread().setName("Echo Server Thread");
+
+        engine = GameEngine.getInstance();
 
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
              ExecutorService executor = Executors.newFixedThreadPool(MAX_EXECUTOR_THREADS);) {
@@ -31,7 +37,7 @@ public class GameServer implements GameServerAPI {
 
                 // We want each client to be processed in a separate thread
                 // to keep the current thread free to accept() requests from new clients
-                ClientHandler clientHandler = new ClientHandler(clientSocket);
+                ClientHandler clientHandler = new ClientHandler(clientSocket, engine);
 
                 // uncomment the line below to launch a thread manually
                 // new Thread(clientHandler).start();
@@ -46,4 +52,13 @@ public class GameServer implements GameServerAPI {
     public void stop() {
 
     }
+
+    public static void main(String[] args) {
+        GameServer server = new GameServer();
+        server.start();
+    }
 }
+
+/*
+    TODO: LOADVA MAP OT FILE!
+ */
