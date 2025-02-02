@@ -35,4 +35,4 @@ public class testvanenagluposti {
 
 // moga da interactvam s weapon i spellove
 // moga da interactvam s potioni
-//
+// mogat da se biqt

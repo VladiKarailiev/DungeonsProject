@@ -1,4 +1,49 @@
 package bg.sofia.uni.fmi.mjt.dungeons.server;
 
-public class GameServer {
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class GameServer implements GameServerAPI {
+
+    private static final int SERVER_PORT = 8008;
+    private static final int MAX_EXECUTOR_THREADS = 10;
+
+    @Override
+    public void start() {
+        Thread.currentThread().setName("Echo Server Thread");
+
+        try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
+             ExecutorService executor = Executors.newFixedThreadPool(MAX_EXECUTOR_THREADS);) {
+
+            System.out.println("Server started and listening for connect requests");
+            Socket clientSocket;
+
+            while (true) {
+                // Calling accept() blocks and waits for connection request by a client
+                // When a request comes, accept() returns a socket to communicate with this
+                // client
+                clientSocket = serverSocket.accept();
+
+                System.out.println("Accepted connection request from client " + clientSocket.getInetAddress());
+
+                // We want each client to be processed in a separate thread
+                // to keep the current thread free to accept() requests from new clients
+                ClientHandler clientHandler = new ClientHandler(clientSocket);
+
+                // uncomment the line below to launch a thread manually
+                // new Thread(clientHandler).start();
+                executor.execute(clientHandler); // use a thread pool to launch a thread
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("There is a problem with the server socket", e);
+        }
+    }
+
+    @Override
+    public void stop() {
+
+    }
 }
