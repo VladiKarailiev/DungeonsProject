@@ -22,8 +22,8 @@ public class MapUpdater implements Runnable {
 
         try (PrintWriter out = new PrintWriter(clientSession.mapSocket().getOutputStream(), true)) {
             while (true) {
-                synchronized (engine) {
-                    engine.wait();
+                synchronized (clientSession) {
+                    clientSession.wait();
                 }
                 System.out.println("Map sent to client");
                 out.println(engine.getStringifiedMap());

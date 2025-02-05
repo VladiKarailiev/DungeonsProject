@@ -1,7 +1,6 @@
 package bg.sofia.uni.fmi.mjt.dungeons.server;
 
 import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
@@ -26,22 +25,20 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-
         Thread.currentThread().setName("Client Handler for " + clientSession.commandSocket().getRemoteSocketAddress());
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(
             clientSession.commandSocket().getInputStream()))) {
-
             String inputLine;
+            System.out.println("Waiting for client message...");
             while ((inputLine = in.readLine()) != null) {
-
                 System.out.println("Message received from client: " + inputLine);
                 handleCommand(inputLine);
-                synchronized (engine) {
-                    engine.notifyAll();
+                synchronized (clientSession) {
+                    clientSession.notifyAll();
                 }
             }
-
+            System.out.println("Client disconnected or message stream ended.");
         } catch (IOException e) {
 
             System.out.println(e.getMessage());
@@ -69,5 +66,5 @@ public class ClientHandler implements Runnable {
 }
 
 /*
-    TODO: IMA BUG NE CHETE KOMANDI FSR
+    bug ne poluchava komandi
  */

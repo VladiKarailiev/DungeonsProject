@@ -16,7 +16,6 @@ public class CommandSender implements Runnable {
 
             Thread.currentThread().setName("Client command thread " + socket.getLocalPort());
             System.out.println("Connected to the server for commands.");
-            /* ot tuka nadolu v dr method ------------------------------*/
             while (true) {
                 System.out.print("Enter message: ");
                 String message = scanner.nextLine();
@@ -25,13 +24,9 @@ public class CommandSender implements Runnable {
                     break;
                 }
                 System.out.println("Sending message <" + message + "> to the server...");
-                writer.println(message);
-                /*
-                char[] buff = new char[BUFFER_SIZE]; // she se smenq
-                int charsRead = reader.read(buff); // read the response from the server
-                String map = new String(buff, 0, charsRead); // Only use the valid portion
-                System.out.print(map);
-                 */
+                writer.write(message + System.lineSeparator());
+                System.out.println("Message sent successfully: " + message);
+                writer.flush();
             }
 
         } catch (IOException e) {

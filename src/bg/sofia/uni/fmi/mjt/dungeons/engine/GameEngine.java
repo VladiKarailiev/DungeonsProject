@@ -47,7 +47,7 @@ public class GameEngine {
     }
 
     private boolean isObstacle(Position target) {
-        return obstacles[target.x()][target.y()] == null || obstacles[target.x()][target.y()] == false;
+        return obstacles[target.x()][target.y()] == null;
     }
 
     public Entity[][] getMap() {
@@ -60,7 +60,7 @@ public class GameEngine {
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
                 if (map[i][j] == null) sb.append('*');
-                //else if (isObstacle(new Position(i, j))) sb.append('#');
+                else if (!isObstacle(new Position(i, j))) sb.append('#');
                 else sb.append(map[i][j].toChar());
             }
             sb.append(System.lineSeparator());

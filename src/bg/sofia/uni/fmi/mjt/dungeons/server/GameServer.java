@@ -22,7 +22,6 @@ public class GameServer implements GameServerAPI {
     @Override
     public void start() {
         Thread.currentThread().setName("Server Thread");
-
         engine = GameEngine.getInstance();
 
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
@@ -35,14 +34,12 @@ public class GameServer implements GameServerAPI {
                 Socket commandSocket = serverSocket.accept();
                 InetAddress clientAddress = commandSocket.getInetAddress();
                 System.out.println("Accepted command connection from " + clientAddress);
-
                 Socket mapSocket = serverSocket.accept();
                 clientAddress = commandSocket.getInetAddress();
                 System.out.println("Accepted map update connection from " + clientAddress);
 
                 ClientSession clientSession = new ClientSession(commandSocket, mapSocket);
                 clients.put(clientAddress, clientSession);
-
                 MapUpdater mapUpdater = new MapUpdater(clientSession, engine);
                 ClientHandler clientHandler = new ClientHandler(clientSession, engine);
 
@@ -67,4 +64,5 @@ public class GameServer implements GameServerAPI {
 
 /*
     TO DO: LOADVA MAP OT FILE!
+           kato se disconnectne da go maha ot mapa
  */

@@ -1,6 +1,7 @@
 package bg.sofia.uni.fmi.mjt.dungeons.client;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
@@ -12,17 +13,18 @@ public class MapVisualizer implements Runnable {
 
     @Override
     public void run() {
-        try (Socket socket = new Socket("localhost", SERVER_PORT);
+        try (Socket socket = new Socket("localhost", SERVER_PORT); // tva ne trqq da e local host fs
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-             ) {
+        ) {
 
             Thread.currentThread().setName("Client map visualizer thread " + socket.getLocalPort());
             System.out.println("Connected to the server for map updates.");
             while (true) {
 
-                char[] buff = new char[BUFFER_SIZE]; // she se smenq
-                int charsRead = reader.read(buff); // read the response from the server
-                String map = new String(buff, 0, charsRead); // Only use the valid portion
+                char[] buff = new char[BUFFER_SIZE];
+                int charsRead = reader.read(buff, 0, BUFFER_SIZE);
+                if (charsRead == -1) continue;
+                String map = new String(buff, 0, charsRead);
                 System.out.print(map);
             }
 
