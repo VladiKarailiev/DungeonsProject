@@ -1,27 +1,28 @@
 package bg.sofia.uni.fmi.mjt.dungeons.server;
 
+import bg.sofia.uni.fmi.mjt.dungeons.client.commands.Command;
+import bg.sofia.uni.fmi.mjt.dungeons.client.commands.MoveCommand;
+import bg.sofia.uni.fmi.mjt.dungeons.client.commands.PrintCommand;
 import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Direction;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
 
     private final ClientSession clientSession;
-    private GameEngine engine;
-    private Position currPosition;
+    private final GameEngine engine;
+    private final Hero hero;
 
     public ClientHandler(ClientSession clientSession, GameEngine engine) {
         this.clientSession = clientSession;
         this.engine = engine;
-        currPosition = engine.getNextFreeSpawn();
-        /// tva she trqq se izmisli kak da idva ot client-a
-        engine.addEntity(currPosition, new Hero("Pich", new Stats(1, 2, 3, 4), null, null));
+        hero = new Hero(engine.getNextFreeSpawn(), "Pich", new Stats(1, 2, 3, 4), null, null);
+        engine.addEntity(hero);
+
     }
 
     @Override
@@ -34,8 +35,8 @@ public class ClientHandler implements Runnable {
                 String inputLine = scanner.next();
                 System.out.println("Message received from client: " + inputLine);
                 handleCommand(inputLine);
-                synchronized (clientSession) {
-                    clientSession.notifyAll();
+                synchronized (engine) {
+                    engine.notifyAll();
                 }
             }
             System.out.println("Client disconnected or message stream ended.");
@@ -51,13 +52,32 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private void handleCommand(String inputLine) { // tuka command pattern i builder pattern
-        String[] parts = inputLine.split(" ");
-        if (parts[0].equals("move")) {
-            engine.moveEntity(currPosition, new Position(Integer.parseInt(parts[1]), Integer.parseInt(parts[2])));
-            currPosition = new Position(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+    private void handleCommand(String inputLine) {
+        Command cmd = commandBuilder(inputLine);
+        cmd.execute();
+    }
+
+    private Command commandBuilder(String inputLine) {
+        switch (inputLine) {
+            case "a" -> {
+                return new MoveCommand(engine, hero, Direction.LEFT);
+            }
+            case "d" -> {
+                return new MoveCommand(engine, hero, Direction.RIGHT);
+            }
+            case "w" -> {
+                return new MoveCommand(engine, hero, Direction.UP);
+            }
+            case "s" -> {
+                return new MoveCommand(engine, hero, Direction.DOWN);
+            }
+            case "p" -> {
+                return new PrintCommand(engine);
+            }
+
+
         }
-        if (parts[0].equals("print")) engine.printMap();
+        return null;
     }
 
 }

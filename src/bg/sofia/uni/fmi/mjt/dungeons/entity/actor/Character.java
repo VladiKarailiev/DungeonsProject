@@ -1,6 +1,7 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
@@ -12,7 +13,8 @@ public abstract class Character extends Entity implements Actor {
     private Weapon weapon;
     //i level!
 
-    public Character(String name, Stats stats, Spell spell, Weapon weapon) {
+    public Character(Position position, String name, Stats stats, Spell spell, Weapon weapon) {
+        super(position);
         this.name = name;
         this.stats = stats;
         this.spell = spell;

@@ -1,13 +1,14 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable;
 
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Character;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 
 public class Weapon extends Equippable {
-    public Weapon(String name, int damage) {
-        super(name, damage);
+    public Weapon(Position pos, String name, int damage) {
+        super(pos, name, damage);
     }
 
     @Override

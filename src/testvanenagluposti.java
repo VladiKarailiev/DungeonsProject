@@ -35,10 +35,10 @@ public class testvanenagluposti {
         */
 
         GameEngine engine = GameEngine.getInstance();
-        engine.addEntity(new Position(1, 1), new Hero("Pich", new Stats(1, 2, 3, 4), null, null));
-        engine.addEntity(new Position(1, 2), new Weapon("Sabq", 10));
+        //engine.addEntity(new Position(1, 1), new Hero("Pich", new Stats(1, 2, 3, 4), null, null));
+        //engine.addEntity(new Position(1, 2), new Weapon("Sabq", 10));
         engine.printMap();
-        engine.moveEntity(new Position(1,1), new Position(1,2));
+        //engine.moveEntity(new Position(1,1), new Position(1,2));
         engine.printMap();
     }
 }
