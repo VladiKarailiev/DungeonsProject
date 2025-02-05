@@ -8,10 +8,11 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
 
-    private ClientSession clientSession;
+    private final ClientSession clientSession;
     private GameEngine engine;
     private Position currPosition;
 
@@ -27,11 +28,10 @@ public class ClientHandler implements Runnable {
     public void run() {
         Thread.currentThread().setName("Client Handler for " + clientSession.commandSocket().getRemoteSocketAddress());
 
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(
-            clientSession.commandSocket().getInputStream()))) {
-            String inputLine;
+        try (Scanner scanner = new Scanner(clientSession.commandSocket().getInputStream())) {
             System.out.println("Waiting for client message...");
-            while ((inputLine = in.readLine()) != null) {
+            while (scanner.hasNext()) {
+                String inputLine = scanner.next();
                 System.out.println("Message received from client: " + inputLine);
                 handleCommand(inputLine);
                 synchronized (clientSession) {
@@ -40,14 +40,11 @@ public class ClientHandler implements Runnable {
             }
             System.out.println("Client disconnected or message stream ended.");
         } catch (IOException e) {
-
             System.out.println(e.getMessage());
         } finally {
             try {
-
                 clientSession.commandSocket().close();
             } catch (IOException e) {
-
                 e.printStackTrace();
             }
         }

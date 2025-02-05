@@ -3,13 +3,16 @@ package bg.sofia.uni.fmi.mjt.dungeons.engine;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameEngine {
 
-    private static final int MAP_SIZE = 5;
-    private static final List<Position> SPAWN_POSITIONS = List.of(new Position(0, 0), new Position(4, 4));
+    private static final int MAP_SIZE = 11;
+    private static final List<Position> SPAWN_POSITIONS = List.of(
+        new Position(0, 0), new Position(0, 5), new Position(0, 10),
+        new Position(5, 0), new Position(5, 5), new Position(5, 10),
+        new Position(10, 0), new Position(10, 5), new Position(10, 10)
+    );
 
     private Entity[][] map = new Entity[MAP_SIZE][MAP_SIZE];
     private Boolean[][] obstacles = new Boolean[MAP_SIZE][MAP_SIZE];

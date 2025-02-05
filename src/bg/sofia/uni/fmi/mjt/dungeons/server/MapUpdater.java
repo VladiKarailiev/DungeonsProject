@@ -7,8 +7,8 @@ import java.io.PrintWriter;
 
 public class MapUpdater implements Runnable {
 
-    private ClientSession clientSession;
-    private GameEngine engine;
+    private final ClientSession clientSession;
+    private final GameEngine engine;
 
     public MapUpdater(ClientSession clientSession, GameEngine engine) {
         this.clientSession = clientSession;
