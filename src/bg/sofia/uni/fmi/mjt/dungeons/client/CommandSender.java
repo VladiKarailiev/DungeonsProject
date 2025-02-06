@@ -9,12 +9,20 @@ import static bg.sofia.uni.fmi.mjt.dungeons.client.Client.SERVER_HOST;
 import static bg.sofia.uni.fmi.mjt.dungeons.client.Client.SERVER_PORT;
 
 public class CommandSender implements Runnable {
+    private final Object connectionReadySignal;
+
+    public CommandSender(Object connectionReadySignal) {
+        this.connectionReadySignal = connectionReadySignal;
+    }
+
     @Override
     public void run() {
         try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
              PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
              Scanner scanner = new Scanner(System.in)) {
-
+            synchronized (connectionReadySignal) {
+                connectionReadySignal.notify();
+            }
             Thread.currentThread().setName("Client command thread " + socket.getLocalPort());
             System.out.println("Connected to the server for commands.");
             while (true) {
@@ -25,6 +33,10 @@ public class CommandSender implements Runnable {
                     break;
                 }
                 System.out.println("Sending message <" + message + "> to the server...");
+                if (socket.isClosed()) {
+                    System.out.println("DEBUG: Socket is closed, cannot send message!");
+                }
+
                 writer.write(message + System.lineSeparator());
                 System.out.println("Message sent successfully: " + message);
                 writer.flush();

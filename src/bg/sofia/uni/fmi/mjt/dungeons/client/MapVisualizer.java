@@ -11,12 +11,24 @@ import static bg.sofia.uni.fmi.mjt.dungeons.client.Client.SERVER_PORT;
 public class MapVisualizer implements Runnable {
     private static final int BUFFER_SIZE = 1024;
 
+    private final Object connectionReadySignal;
+
+    public MapVisualizer(Object connectionReadySignal) {
+        this.connectionReadySignal = connectionReadySignal;
+    }
+
     @Override
     public void run() {
+        synchronized (connectionReadySignal) {
+            try {
+                connectionReadySignal.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
-
             Thread.currentThread().setName("Client map visualizer thread " + socket.getLocalPort());
             System.out.println("Connected to the server for map updates.");
             while (true) {

@@ -16,9 +16,11 @@ public class Client {
 
         try (ExecutorService executor = Executors.newFixedThreadPool(MAX_EXECUTOR_THREADS)) {
 
-            CommandSender commandSender = new CommandSender();
-            MapVisualizer mapVisualizer = new MapVisualizer();
+            Object connectionReadySignal = new Object();
+            CommandSender commandSender = new CommandSender(connectionReadySignal);
+            MapVisualizer mapVisualizer = new MapVisualizer(connectionReadySignal);
             executor.execute(commandSender);
+
             executor.execute(mapVisualizer);
 
         }

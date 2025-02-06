@@ -35,8 +35,8 @@ public class ClientHandler implements Runnable {
         Socket socket = clientSession.getCommandSocket();
         try (Scanner scanner = new Scanner(clientSession.getCommandSocket().getInputStream())) {
             System.out.println("Waiting for client message...");
-            while (scanner.hasNext()) {
-                String inputLine = scanner.next();
+            while (scanner.hasNextLine()) {
+                String inputLine = scanner.nextLine();
                 System.out.println("Message received from client: " + inputLine);
                 handleCommand(inputLine);
                 synchronized (engine) {
