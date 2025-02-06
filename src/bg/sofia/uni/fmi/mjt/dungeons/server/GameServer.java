@@ -3,48 +3,44 @@ package bg.sofia.uni.fmi.mjt.dungeons.server;
 
 import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
 
-import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_PLAYERS;
 
-public class GameServer implements GameServerAPI {
+public class GameServer {
 
     private static final int SERVER_PORT = 8008;
     private static final int MAX_EXECUTOR_THREADS = 20;
-    private final ConcurrentHashMap<InetAddress, ClientSession> clients = new ConcurrentHashMap<>();
-    private int playersCount = 0;
-    private GameEngine engine;
+    static int playersCount = 0;
 
-    @Override
-    public void start() {
+    public static void start() {
         Thread.currentThread().setName("Server Thread");
-        engine = GameEngine.getInstance();
-
+        GameEngine engine = GameEngine.getInstance();
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
              ExecutorService executor = Executors.newFixedThreadPool(MAX_EXECUTOR_THREADS)) {
-
             System.out.println("Server started and listening for connect requests");
-
             while (true) {
                 Socket commandSocket = serverSocket.accept();
                 InetAddress clientAddress = commandSocket.getInetAddress();
-                System.out.println("Accepted command connection from " + clientAddress);
+                System.out.println("Accepted connection from " + clientAddress);
                 Socket mapSocket = serverSocket.accept();
-                clientAddress = commandSocket.getInetAddress();
-                System.out.println("Accepted map update connection from " + clientAddress);
-
                 ClientSession clientSession = new ClientSession(commandSocket, mapSocket, null);
-                clients.put(clientAddress, clientSession);
                 MapUpdater mapUpdater = new MapUpdater(clientSession, engine);
                 ClientHandler clientHandler = new ClientHandler(clientSession, engine);
                 playersCount++;
-                if (playersCount > MAX_PLAYERS) continue;
+                if (playersCount > MAX_PLAYERS) {
+                    try (PrintWriter out = new PrintWriter(mapSocket.getOutputStream(), true)) {
+                        out.println("Server is full! Max 9 players allowed.");
+                    }
+                    mapSocket.close();
+                    commandSocket.close();
+                    continue;
+                }
                 executor.execute(clientHandler);
                 executor.execute(mapUpdater);
             }
@@ -53,13 +49,7 @@ public class GameServer implements GameServerAPI {
         }
     }
 
-    @Override
-    public void stop() {
-
-    }
-
     public static void main(String[] args) {
-        GameServer server = new GameServer();
-        server.start();
+        GameServer.start();
     }
 }

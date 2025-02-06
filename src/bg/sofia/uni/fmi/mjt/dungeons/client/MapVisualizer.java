@@ -14,6 +14,9 @@ public class MapVisualizer implements Runnable {
     private final Object connectionReadySignal;
 
     public MapVisualizer(Object connectionReadySignal) {
+        if (connectionReadySignal == null) {
+            throw new IllegalArgumentException("Arguments can't be null");
+        }
         this.connectionReadySignal = connectionReadySignal;
     }
 
@@ -27,12 +30,9 @@ public class MapVisualizer implements Runnable {
             }
         }
         try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-        ) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             Thread.currentThread().setName("Client map visualizer thread " + socket.getLocalPort());
-            System.out.println("Connected to the server for map updates.");
             while (true) {
-
                 char[] buff = new char[BUFFER_SIZE];
                 int charsRead = reader.read(buff, 0, BUFFER_SIZE);
                 if (charsRead == -1) continue;

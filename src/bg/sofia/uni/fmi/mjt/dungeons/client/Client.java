@@ -20,7 +20,6 @@ public class Client {
             CommandSender commandSender = new CommandSender(connectionReadySignal);
             MapVisualizer mapVisualizer = new MapVisualizer(connectionReadySignal);
             executor.execute(commandSender);
-
             executor.execute(mapVisualizer);
 
         }

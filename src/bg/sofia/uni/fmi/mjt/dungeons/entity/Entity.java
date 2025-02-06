@@ -5,6 +5,9 @@ public abstract class Entity implements Visitor {
     Position pos;
 
     public Entity(Position position) {
+        if (position == null) {
+            throw new IllegalArgumentException("Position can't be null");
+        }
         pos = position;
     }
 

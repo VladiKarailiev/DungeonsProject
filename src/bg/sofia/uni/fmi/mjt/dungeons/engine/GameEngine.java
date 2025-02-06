@@ -9,6 +9,7 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.potion.HealthPotion;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.potion.ManaPotion;
+import bg.sofia.uni.fmi.mjt.dungeons.exceptions.NoSpawnPositionException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -27,6 +28,14 @@ public class GameEngine {
             new Position(5, 10), new Position(10, 0), new Position(10, 5), new Position(10, 10));
     private static final String DEFAULT_MAP_PATH = "map.txt";
 
+    public static final int MAX_HP = 100;
+    public static final int MAX_MANA = 100;
+    public static final int MAX_ATTACK = 50;
+    public static final int MAX_DEFENSE = 50;
+    public static final int MAX_POT_AMOUNT = 50;
+    public static final int MAX_NPC_XP = 500;
+
+
     private Entity[][] map = new Entity[MAP_SIZE][MAP_SIZE];
     private Set<Position> obstacles = new HashSet<>();
 
@@ -34,11 +43,13 @@ public class GameEngine {
     private static GameEngine singleInstance = null;
 
     private Entity[][] loadMap(String path) {
+        if (path == null) {
+            throw new IllegalArgumentException("Path can't be null");
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             int rows = MAP_SIZE;
             int cols = MAP_SIZE;
-
             Entity[][] map = new Entity[rows][cols];
 
             int currentRow = 0;
@@ -54,7 +65,6 @@ public class GameEngine {
                 }
                 currentRow++;
             }
-
             return map;
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,23 +76,25 @@ public class GameEngine {
         Random random = new Random();
         switch (tile) {
             case 'h':
-                return new HealthPotion(pos, random.nextInt(10));
+                return new HealthPotion(pos, random.nextInt(MAX_POT_AMOUNT));
             case 'm':
-                return new ManaPotion(pos, random.nextInt(10));
+                return new ManaPotion(pos, random.nextInt(MAX_POT_AMOUNT));
             case 'W':
-                return new Weapon(pos, "Orujie", random.nextInt(10),
-                    new Level().addXP(random.nextInt(300)));
+                return new Weapon(pos, "Orujie", random.nextInt(MAX_ATTACK),
+                    new Level().addXP(random.nextInt(MAX_NPC_XP)));
             case 'S':
-                return new Spell(pos, "Magiika", random.nextInt(10), random.nextInt(5),
-                    new Level().addXP(random.nextInt(300)));
+                return new Spell(pos, "Magiika", random.nextInt(MAX_ATTACK), random.nextInt(MAX_MANA),
+                    new Level().addXP(random.nextInt(MAX_NPC_XP)));
             case 'M':
                 Level lvl = new Level();
                 return new Minion(pos, "Minionche",
-                    new Stats(random.nextInt(10), random.nextInt(10), random.nextInt(10), random.nextInt(10)),
-                    new Spell(pos, "Orujie", random.nextInt(10), random.nextInt(5), new Level().addXP(random.nextInt(300))),
-                    new Weapon(pos, "Magiika", random.nextInt(10),
-                        new Level().addXP(random.nextInt(300))),
-                    new Level().addXP(random.nextInt(500)));
+                    new Stats(random.nextInt(MAX_HP), random.nextInt(MAX_MANA), random.nextInt(MAX_ATTACK),
+                        random.nextInt(MAX_DEFENSE)),
+                    new Spell(pos, "Orujie", random.nextInt(MAX_ATTACK), random.nextInt(MAX_MANA),
+                        new Level().addXP(random.nextInt(MAX_NPC_XP))),
+                    new Weapon(pos, "Magiika", random.nextInt(MAX_ATTACK),
+                        new Level().addXP(random.nextInt(MAX_NPC_XP))),
+                    new Level().addXP(random.nextInt(MAX_NPC_XP)));
             case '*':
             default:
                 return null;
@@ -93,19 +105,26 @@ public class GameEngine {
         map = loadMap(DEFAULT_MAP_PATH);
     }
 
-    public Position getNextFreeSpawn() {
-        return SPAWN_POSITIONS.stream().filter(q -> map[q.x()][q.y()] == null && !isObstacle(q)).findAny().get();
+    public Position getNextFreeSpawn() throws NoSpawnPositionException {
+        return SPAWN_POSITIONS.stream()
+            .filter(q -> map[q.x()][q.y()] == null && !isObstacle(q))
+            .findAny()
+            .orElseThrow(() -> new NoSpawnPositionException("No free spawn positions available"));
     }
 
     public static GameEngine getInstance() {
         if (singleInstance == null) singleInstance = new GameEngine();
-
         return singleInstance;
     }
 
     public void moveEntity(Entity entity, Position target) {
+        if (entity == null || target == null) {
+            throw new IllegalArgumentException("Arguments can't be null");
+        }
         if (!canMoveTo(target) || map[target.x()][target.y()] == entity) return;
-        if (map[target.x()][target.y()] != null) map[target.x()][target.y()].accept(entity);
+        if (map[target.x()][target.y()] != null) {
+            map[target.x()][target.y()].accept(entity);
+        }
         Position oldPos = entity.getPos();
         entity.setPos(target);
         map[target.x()][target.y()] = entity;
@@ -114,17 +133,26 @@ public class GameEngine {
     }
 
     private boolean canMoveTo(Position target) {
+        if (target == null) {
+            return false;
+        }
         return !isObstacle(target) && target.x() >= 0 && target.x() < map.length && target.y() >= 0 &&
             target.y() < map.length;
     }
 
     public void addEntity(Entity entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException("Can't add null entity!");
+        }
         Position pos = entity.getPos();
         if (map[pos.x()][pos.y()] != null) throw new IllegalArgumentException("ima neshto veche tam");
         map[pos.x()][pos.y()] = entity;
     }
 
     public void removeEntity(Entity entity) {
+        if (entity == null) {
+            throw new IllegalArgumentException("Can't remove null entity!");
+        }
         Position pos = entity.getPos();
         map[pos.x()][pos.y()] = null;
         entity.setPos(null);

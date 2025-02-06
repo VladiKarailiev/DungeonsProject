@@ -11,6 +11,10 @@ public class ClientSession {
     Hero hero;
 
     public ClientSession(Socket commandSocket, Socket mapSocket, Hero hero) {
+        if (commandSocket == null || mapSocket == null) {
+            throw new IllegalArgumentException("Sockets can't be null");
+        }
+
         this.commandSocket = commandSocket;
         this.mapSocket = mapSocket;
         this.hero = hero;

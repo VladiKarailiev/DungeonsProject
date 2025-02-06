@@ -12,6 +12,9 @@ public class MoveCommand implements Command {
     private final Direction direction;
 
     public MoveCommand(GameEngine engine, Entity entity, Direction direction) {
+        if (engine == null || entity == null || direction == null) {
+            throw new IllegalArgumentException("Arguments can't be null");
+        }
         this.engine = engine;
         this.entity = entity;
         this.direction = direction;
@@ -19,24 +22,14 @@ public class MoveCommand implements Command {
 
     @Override
     public void execute() {
-        Position to = entity.getPos();
         Position from = entity.getPos();
-        switch (direction) {
-            case UP:
-                to = new Position(from.x() - 1, from.y());
-                break;
-            case DOWN:
-                to = new Position(from.x() + 1, from.y());
-                break;
-            case LEFT:
-                to = new Position(from.x(), from.y() - 1);
-                break;
-            case RIGHT:
-                to = new Position(from.x(), from.y() + 1);
-                break;
-        }
+        Position to = switch (direction) {
+            case UP -> new Position(from.x() - 1, from.y());
+            case DOWN -> new Position(from.x() + 1, from.y());
+            case LEFT -> new Position(from.x(), from.y() - 1);
+            case RIGHT -> new Position(from.x(), from.y() + 1);
+        };
         engine.moveEntity(entity, to);
-        from = new Position(to.x(), to.y());
 
     }
 }

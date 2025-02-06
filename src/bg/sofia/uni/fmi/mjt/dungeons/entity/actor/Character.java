@@ -20,6 +20,9 @@ public abstract class Character extends Entity implements Actor {
 
     public Character(Position position, String name, Stats stats, Spell spell, Weapon weapon) {
         super(position);
+        if (position == null || name == null || stats == null) {
+            throw new IllegalArgumentException("Can't create character with null as a position/name/stats");
+        }
         this.name = name;
         this.stats = stats;
         this.spell = spell;
@@ -28,6 +31,9 @@ public abstract class Character extends Entity implements Actor {
     }
 
     public boolean fightWith(Character character) {
+        if (character == null) {
+            return false;
+        }
         while (character.isAlive() && isAlive()) {
             character.takeDamage(stats.attack());
             if (character.isAlive()) takeDamage(character.stats.attack());
@@ -45,17 +51,25 @@ public abstract class Character extends Entity implements Actor {
 
     @Override
     public void equip(Weapon weapon) {
+        if (weapon == null) {
+            return;
+        }
         if (weapon.getLevel().getLevel() <= level.getLevel() &&
             (this.weapon == null || weapon.getDamage() > this.weapon.getDamage())) {
             this.weapon = weapon;
+            stats = new Stats(stats.health(), stats.mana(), stats.attack() + weapon.getDamage(), stats.defense());
         } else backpack.add(weapon);
     }
 
     @Override
     public void learn(Spell spell) {
+        if (spell == null) {
+            return;
+        }
         if ((spell.getLevel().getXP() <= level.getXP() &&
             spell.getManaCost() <= stats.mana() &&
             (this.spell == null || spell.getDamage() > this.spell.getDamage()))) {
+            stats = new Stats(stats.health(), stats.mana(), stats.attack() + spell.getDamage(), stats.defense());
             this.spell = spell;
         } else backpack.add(spell);
     }
@@ -84,6 +98,9 @@ public abstract class Character extends Entity implements Actor {
 
     @Override
     public void accept(Visitor visitor) {
+        if (visitor == null) {
+            return;
+        }
         visitor.visitCharacter(this);
     }
 

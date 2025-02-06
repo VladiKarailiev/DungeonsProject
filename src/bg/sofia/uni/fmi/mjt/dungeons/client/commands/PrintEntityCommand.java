@@ -8,6 +8,9 @@ public class PrintEntityCommand implements Command {
     private final GameEngine engine;
 
     public PrintEntityCommand(Entity entity, GameEngine engine) {
+        if (engine == null || entity == null) {
+            throw new IllegalArgumentException("Arguments can't be null");
+        }
         this.entity = entity;
         this.engine = engine;
     }

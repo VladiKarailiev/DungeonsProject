@@ -14,6 +14,9 @@ public class Hero extends Character {
 
     @Override
     public void visitCharacter(Character character) {
+        if (character == null) {
+            return;
+        }
         boolean fightResult = fightWith(character);
 
         if (fightResult) {
@@ -21,14 +24,17 @@ public class Hero extends Character {
 
         }
         System.out.println(
-            "Hero:" + toString() + " interacts with another character and the result is: " + fightResult);
+            "Hero:" + toString() + " interacts with another character and the result is: " +
+                (fightResult ? "won" : "lost"));
     }
 
     @Override
     public void visitTreasure(Treasure treasure) {
+        if (treasure == null) {
+            return;
+        }
         treasure.consume(this);
         System.out.println("Hero:" + toString() + "  interacts with treasure:" + treasure.toString());
-
     }
 
     @Override

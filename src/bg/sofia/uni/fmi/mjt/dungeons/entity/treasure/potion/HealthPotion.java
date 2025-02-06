@@ -12,13 +12,19 @@ public class HealthPotion extends Potion {
     }
 
     @Override
-    public void consume(Hero hero) {
-        hero.takeHealing(amount);
-        System.out.println("hero:" + hero.toString() + " consumed hp pot:" + this.toString());
+    public void consume(Character character) {
+        if (character == null) {
+            return;
+        }
+        character.takeHealing(amount);
+        System.out.println("hero:" + character.toString() + " consumed hp pot:" + this.toString());
     }
 
     @Override
     public void accept(Visitor visitor) {
+        if (visitor == null) {
+            return;
+        }
         visitor.visitTreasure(this);
     }
 
@@ -29,16 +35,20 @@ public class HealthPotion extends Potion {
 
     @Override
     public void visitCharacter(Character character) {
-        consume((Hero) character); // TVA NE TRQQ DA E TAKA TODO
+        if (character == null) {
+            return;
+        }
+        consume(character);
         System.out.println("Potion interacts with character:" + character.toString());
     }
 
     @Override
     public void visitTreasure(Treasure treasure) {
-
+        if (treasure == null) {
+            return;
+        }
         System.out.println("Potion interacts with treasure:" + treasure.toString());
     }
-
 
 
 }

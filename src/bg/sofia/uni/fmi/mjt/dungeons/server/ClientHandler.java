@@ -3,27 +3,32 @@ package bg.sofia.uni.fmi.mjt.dungeons.server;
 import bg.sofia.uni.fmi.mjt.dungeons.client.commands.Command;
 import bg.sofia.uni.fmi.mjt.dungeons.client.commands.MoveCommand;
 import bg.sofia.uni.fmi.mjt.dungeons.client.commands.PrintCommand;
-import bg.sofia.uni.fmi.mjt.dungeons.client.commands.PrintEntityCommand;
 import bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Direction;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
+import bg.sofia.uni.fmi.mjt.dungeons.exceptions.IllegalCommandException;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
-import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_PLAYERS;
+import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_ATTACK;
+import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_DEFENSE;
+import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_HP;
+import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_MANA;
 
 public class ClientHandler implements Runnable {
 
     private final ClientSession clientSession;
     private final GameEngine engine;
     private final Hero hero;
+
     public ClientHandler(ClientSession clientSession, GameEngine engine) throws Exception {
         this.clientSession = clientSession;
         this.engine = engine;
-        hero = new Hero(engine.getNextFreeSpawn(), "Pich", new Stats(100, 200, 30, 40), null, null);
+        hero = new Hero(engine.getNextFreeSpawn(), "Pich", new Stats(MAX_HP, MAX_MANA, MAX_ATTACK, MAX_DEFENSE), null,
+            null);
         engine.addEntity(hero);
         clientSession.changeHero(hero);
     }
@@ -32,7 +37,6 @@ public class ClientHandler implements Runnable {
     public void run() {
         Thread.currentThread()
             .setName("Client Handler for " + clientSession.getCommandSocket().getRemoteSocketAddress());
-        Socket socket = clientSession.getCommandSocket();
         try (Scanner scanner = new Scanner(clientSession.getCommandSocket().getInputStream())) {
             System.out.println("Waiting for client message...");
             while (scanner.hasNextLine()) {
@@ -51,6 +55,7 @@ public class ClientHandler implements Runnable {
                 clientSession.getCommandSocket().close();
                 clientSession.getMapSocket().close();
                 engine.removeEntity(hero);
+                GameServer.playersCount--;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -59,12 +64,17 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleCommand(String inputLine) {
-        Command cmd = commandBuilder(inputLine);
-        if (cmd != null)
-            cmd.execute();
+        Command cmd;
+        try {
+            cmd = commandBuilder(inputLine);
+        } catch (IllegalCommandException e) {
+            System.out.println("Can't handle this command.");
+            return;
+        }
+        cmd.execute();
     }
 
-    private Command commandBuilder(String inputLine) {
+    private Command commandBuilder(String inputLine) throws IllegalCommandException {
         switch (inputLine) {
             case "a" -> {
                 return new MoveCommand(engine, hero, Direction.LEFT);
@@ -81,13 +91,11 @@ public class ClientHandler implements Runnable {
             case "p" -> {
                 return new PrintCommand(engine);
             }
+            default -> {
+                throw new IllegalCommandException("Not a valid command");
+            }
 
         }
-        return null;
     }
 
 }
-
-/*
-    bug ne poluchava komandi
- */

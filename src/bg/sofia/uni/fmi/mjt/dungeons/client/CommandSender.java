@@ -12,6 +12,9 @@ public class CommandSender implements Runnable {
     private final Object connectionReadySignal;
 
     public CommandSender(Object connectionReadySignal) {
+        if (connectionReadySignal == null) {
+            throw new IllegalArgumentException("Arguments can't be null");
+        }
         this.connectionReadySignal = connectionReadySignal;
     }
 
@@ -24,21 +27,15 @@ public class CommandSender implements Runnable {
                 connectionReadySignal.notify();
             }
             Thread.currentThread().setName("Client command thread " + socket.getLocalPort());
-            System.out.println("Connected to the server for commands.");
             while (true) {
-                System.out.print("Enter message: ");
+                System.out.print("Enter command: ");
                 String message = scanner.nextLine();
 
                 if ("quit".equals(message)) {
                     break;
                 }
-                System.out.println("Sending message <" + message + "> to the server...");
-                if (socket.isClosed()) {
-                    System.out.println("DEBUG: Socket is closed, cannot send message!");
-                }
 
                 writer.write(message + System.lineSeparator());
-                System.out.println("Message sent successfully: " + message);
                 writer.flush();
             }
 

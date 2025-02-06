@@ -10,7 +10,6 @@ public interface Actor {
      *
      * @param weapon the weapon to be equipped
      * @return nothing
-     * @throws IllegalArgumentException if the weapon is null
      */
     void equip(Weapon weapon);
 
@@ -19,16 +18,14 @@ public interface Actor {
      *
      * @param spell the spell to be learned
      * @return nothing
-     * @throws IllegalArgumentException if the spell is null
      */
     void learn(Spell spell);
 
     /**
-     * Adds healing points to Actor
+     * Adds health points to Actor
      *
      * @param amount the amount to be added
      * @return nothing
-     * @throws IllegalArgumentException if the amount is not in [0,1000]
      */
     void takeHealing(Integer amount);
 
@@ -36,8 +33,6 @@ public interface Actor {
      * Adds mana points to Actor
      *
      * @param amount the amount to be added
-     * @return nothing
-     * @throws IllegalArgumentException if the amount is not in [0,1000]
      */
     void takeMana(Integer amount);
 
@@ -45,8 +40,6 @@ public interface Actor {
      * Applies damage to Actor
      *
      * @param amount the amount to be applied
-     * @return nothing
-     * @throws IllegalArgumentException if the amount is not in [0,1000]
      */
     void takeDamage(Integer amount);
 
