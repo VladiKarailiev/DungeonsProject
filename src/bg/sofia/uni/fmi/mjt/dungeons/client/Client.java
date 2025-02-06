@@ -7,14 +7,12 @@ public class Client {
 
 
     static final int SERVER_PORT = 8008;
-    private static final int BUFFER_SIZE = 1024;
+    static final String SERVER_HOST = "localhost";
     private static final int MAX_EXECUTOR_THREADS = 5;
 
     public static void main(String[] args) {
 
         Thread.currentThread().setName("Client Thread");
-
-        Client test = new Client();
 
         try (ExecutorService executor = Executors.newFixedThreadPool(MAX_EXECUTOR_THREADS)) {
 
@@ -26,6 +24,4 @@ public class Client {
         }
     }
 
-    private void startMapVisualizer() {
-    }
 }

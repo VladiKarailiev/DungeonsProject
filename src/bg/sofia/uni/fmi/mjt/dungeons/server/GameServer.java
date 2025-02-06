@@ -28,7 +28,6 @@ public class GameServer implements GameServerAPI {
              ExecutorService executor = Executors.newFixedThreadPool(MAX_EXECUTOR_THREADS)) {
 
             System.out.println("Server started and listening for connect requests");
-            Socket clientSocketCommand;
 
             while (true) {
                 Socket commandSocket = serverSocket.accept();
@@ -38,7 +37,7 @@ public class GameServer implements GameServerAPI {
                 clientAddress = commandSocket.getInetAddress();
                 System.out.println("Accepted map update connection from " + clientAddress);
 
-                ClientSession clientSession = new ClientSession(commandSocket, mapSocket);
+                ClientSession clientSession = new ClientSession(commandSocket, mapSocket, null);
                 clients.put(clientAddress, clientSession);
                 MapUpdater mapUpdater = new MapUpdater(clientSession, engine);
                 ClientHandler clientHandler = new ClientHandler(clientSession, engine);
@@ -46,7 +45,7 @@ public class GameServer implements GameServerAPI {
                 executor.execute(clientHandler);
                 executor.execute(mapUpdater);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("There is a problem with the server socket", e);
         }
     }
@@ -61,8 +60,3 @@ public class GameServer implements GameServerAPI {
         server.start();
     }
 }
-
-/*
-    TO DO: LOADVA MAP OT FILE!
-           kato se disconnectne da go maha ot mapa
- */

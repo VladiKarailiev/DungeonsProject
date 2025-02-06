@@ -1,6 +1,7 @@
 package bg.sofia.uni.fmi.mjt.dungeons.engine;
 
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Entity;
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Level;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Minion;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 public class GameEngine {
 
+    public static final int MAX_PLAYERS = 9;
     private static final int MAP_SIZE = 11;
     private static final List<Position> SPAWN_POSITIONS =
         List.of(new Position(0, 0), new Position(0, 5), new Position(0, 10), new Position(5, 0), new Position(5, 5),
@@ -68,14 +70,16 @@ public class GameEngine {
             case 'm':
                 return new ManaPotion(pos, random.nextInt(10));
             case 'W':
-                return new Weapon(pos, "Orujie", random.nextInt(10));
+                return new Weapon(pos, "Orujie", random.nextInt(10),
+                    new Level().addXP(random.nextInt(300)));
             case 'S':
-                return new Spell(pos, "Magiika", random.nextInt(10), random.nextInt(5));
+                return new Spell(pos, "Magiika", random.nextInt(10), random.nextInt(5),
+                    new Level().addXP(random.nextInt(300)));
             case 'M':
                 return new Minion(pos, "Minionche",
                     new Stats(random.nextInt(10), random.nextInt(10), random.nextInt(10), random.nextInt(10)),
-                    new Spell(pos, "Orujie", random.nextInt(10), random.nextInt(5)),
-                    new Weapon(pos, "Magiika", random.nextInt(10)));
+                    new Spell(pos, "Orujie", random.nextInt(10), random.nextInt(5), new Level().addXP(random.nextInt(300))),
+                    new Weapon(pos, "Magiika", random.nextInt(10), new Level().addXP(random.nextInt(300))));
             case '*':
             default:
                 return null;
@@ -97,7 +101,7 @@ public class GameEngine {
     }
 
     public void moveEntity(Entity entity, Position target) {
-        if (map[target.x()][target.y()] == entity) return;
+        if (!canMoveTo(target) || map[target.x()][target.y()] == entity) return;
         if (map[target.x()][target.y()] != null) map[target.x()][target.y()].accept(entity);
         Position oldPos = entity.getPos();
         entity.setPos(target);
@@ -106,10 +110,21 @@ public class GameEngine {
 
     }
 
+    private boolean canMoveTo(Position target) {
+        return !isObstacle(target) && target.x() >= 0 && target.x() < map.length && target.y() >= 0 &&
+            target.y() < map.length;
+    }
+
     public void addEntity(Entity entity) {
         Position pos = entity.getPos();
         if (map[pos.x()][pos.y()] != null) throw new IllegalArgumentException("ima neshto veche tam");
         map[pos.x()][pos.y()] = entity;
+    }
+
+    public void removeEntity(Entity entity) {
+        Position pos = entity.getPos();
+        map[pos.x()][pos.y()] = null;
+        entity.setPos(null);
     }
 
     private boolean isObstacle(Position target) {
@@ -138,8 +153,7 @@ public class GameEngine {
         System.out.print(getStringifiedMap());
     }
 
+    public void printEntity(Entity entity) {
+        System.out.println(entity);
+    }
 }
-/***
- * TODO: MOJE DA E SINGLETON? done
- * TODO: SBIH SE  SUS SEBE SI ???
- */

@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable;
 
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Level;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Character;
@@ -10,9 +11,13 @@ public class Spell extends Equippable {
 
     private int manaCost;
 
-    public Spell(Position pos, String name, int damage, int manaCost) {
-        super(pos, name, damage);
+    public Spell(Position pos, String name, int damage, int manaCost, Level lvl) {
+        super(pos, name, damage, lvl);
         this.manaCost = manaCost;
+    }
+
+    public int getManaCost() {
+        return manaCost;
     }
 
     @Override

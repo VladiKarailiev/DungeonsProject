@@ -15,5 +15,10 @@ public abstract class Potion extends Entity implements Treasure {
 
     public abstract  void consume(Hero hero);
 
-
+    @Override
+    public String toString() {
+        return "Potion{" +
+            "amount=" + amount +
+            '}';
+    }
 }

@@ -5,12 +5,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import static bg.sofia.uni.fmi.mjt.dungeons.client.Client.SERVER_HOST;
 import static bg.sofia.uni.fmi.mjt.dungeons.client.Client.SERVER_PORT;
 
 public class CommandSender implements Runnable {
     @Override
     public void run() {
-        try (Socket socket = new Socket("localhost", SERVER_PORT);
+        try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
              PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
              Scanner scanner = new Scanner(System.in)) {
 

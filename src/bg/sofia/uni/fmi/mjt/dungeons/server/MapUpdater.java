@@ -18,15 +18,16 @@ public class MapUpdater implements Runnable {
     @Override
     public void run() {
 
-        Thread.currentThread().setName("MapUpdater for " + clientSession.mapSocket().getRemoteSocketAddress());
+        Thread.currentThread().setName("MapUpdater for " + clientSession.getMapSocket().getRemoteSocketAddress());
 
-        try (PrintWriter out = new PrintWriter(clientSession.mapSocket().getOutputStream(), true)) {
+        try (PrintWriter out = new PrintWriter(clientSession.getMapSocket().getOutputStream(), true)) {
             while (true) {
                 synchronized (engine) {
                     engine.wait();
                 }
                 System.out.println("Map sent to client");
                 out.println(engine.getStringifiedMap());
+                out.println(clientSession.getHero().toString());
 
             }
         } catch (IOException | InterruptedException e) {
@@ -37,7 +38,7 @@ public class MapUpdater implements Runnable {
 
             try {
 
-                clientSession.mapSocket().close();
+                clientSession.getMapSocket().close();
             } catch (IOException e) {
 
                 e.printStackTrace();
