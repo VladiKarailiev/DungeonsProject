@@ -28,19 +28,19 @@ public class MapUpdater implements Runnable {
                 System.out.println("Map sent to client");
                 out.println(engine.getStringifiedMap());
                 out.println(clientSession.getHero().toString());
+                if (!clientSession.getHero().isAlive()) {
+                    out.println("You are dead...");
+                    break;
+                }
 
             }
         } catch (IOException | InterruptedException e) {
-
             System.out.println(e.getMessage());
-
         } finally {
-
             try {
-
                 clientSession.getMapSocket().close();
+                clientSession.getCommandSocket().close();
             } catch (IOException e) {
-
                 e.printStackTrace();
             }
         }

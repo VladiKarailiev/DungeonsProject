@@ -76,10 +76,13 @@ public class GameEngine {
                 return new Spell(pos, "Magiika", random.nextInt(10), random.nextInt(5),
                     new Level().addXP(random.nextInt(300)));
             case 'M':
+                Level lvl = new Level();
                 return new Minion(pos, "Minionche",
                     new Stats(random.nextInt(10), random.nextInt(10), random.nextInt(10), random.nextInt(10)),
                     new Spell(pos, "Orujie", random.nextInt(10), random.nextInt(5), new Level().addXP(random.nextInt(300))),
-                    new Weapon(pos, "Magiika", random.nextInt(10), new Level().addXP(random.nextInt(300))));
+                    new Weapon(pos, "Magiika", random.nextInt(10),
+                        new Level().addXP(random.nextInt(300))),
+                    new Level().addXP(random.nextInt(500)));
             case '*':
             default:
                 return null;

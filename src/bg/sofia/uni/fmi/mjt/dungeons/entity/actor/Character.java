@@ -5,20 +5,18 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.Level;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Equippable;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
 import java.util.ArrayList;
 
 public abstract class Character extends Entity implements Actor {
-    private final String name;
-    private Stats stats;
-    private Spell spell;
-    private Weapon weapon;
-    private Level level;
-    private ArrayList<Treasure> backpack = new ArrayList<>();
-
+    protected final String name;
+    protected Stats stats;
+    protected Spell spell;
+    protected Weapon weapon;
+    protected Level level;
+    protected final ArrayList<Treasure> backpack = new ArrayList<>();
 
     public Character(Position position, String name, Stats stats, Spell spell, Weapon weapon) {
         super(position);
@@ -34,7 +32,6 @@ public abstract class Character extends Entity implements Actor {
             character.takeDamage(stats.attack());
             if (character.isAlive()) takeDamage(character.stats.attack());
         }
-        level.addXP(character.getXP());
         return isAlive();
     }
 
@@ -42,9 +39,13 @@ public abstract class Character extends Entity implements Actor {
         return level.getXP();
     }
 
+    public void addXP(int amount) {
+        level.addXP(amount);
+    }
+
     @Override
     public void equip(Weapon weapon) {
-        if (weapon.getLevel().getXP() > level.getXP() &&
+        if (weapon.getLevel().getLevel() <= level.getLevel() &&
             (this.weapon == null || weapon.getDamage() > this.weapon.getDamage())) {
             this.weapon = weapon;
         } else backpack.add(weapon);
@@ -52,7 +53,7 @@ public abstract class Character extends Entity implements Actor {
 
     @Override
     public void learn(Spell spell) {
-        if ((spell.getLevel().getXP() > level.getXP() &&
+        if ((spell.getLevel().getXP() <= level.getXP() &&
             spell.getManaCost() <= stats.mana() &&
             (this.spell == null || spell.getDamage() > this.spell.getDamage()))) {
             this.spell = spell;
@@ -103,6 +104,11 @@ public abstract class Character extends Entity implements Actor {
         if (spell != null) {
             sb.append(" ").append(spell.toString());
         }
+        sb.append(System.lineSeparator()).append("Backpack: ");
+        for (var item : backpack) {
+            sb.append(item.toString()).append(" ");
+        }
+        sb.append(System.lineSeparator());
         return sb.toString().trim();
     }
 }

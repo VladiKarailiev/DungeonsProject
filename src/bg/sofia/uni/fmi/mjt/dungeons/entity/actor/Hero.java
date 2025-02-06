@@ -5,11 +5,7 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
-import java.util.ArrayList;
-
 public class Hero extends Character {
-
-    private ArrayList<Treasure> backpack;
 
     public Hero(Position pos, String name, Stats stats, Spell spell,
                 Weapon weapon) {
@@ -18,17 +14,20 @@ public class Hero extends Character {
 
     @Override
     public void visitCharacter(Character character) {
-        //provide options
         boolean fightResult = fightWith(character);
-        //tva moje i da trqq da se iznese
-        System.out.println("Hero interacts with another character and the result is: " + fightResult);
+
+        if (fightResult) {
+            addXP(character.getXP());
+
+        }
+        System.out.println(
+            "Hero:" + toString() + " interacts with another character and the result is: " + fightResult);
     }
 
     @Override
     public void visitTreasure(Treasure treasure) {
-        // provide option to store
         treasure.consume(this);
-        System.out.println("Hero interacts with treasure:" + treasure.toString());
+        System.out.println("Hero:" + toString() + "  interacts with treasure:" + treasure.toString());
 
     }
 

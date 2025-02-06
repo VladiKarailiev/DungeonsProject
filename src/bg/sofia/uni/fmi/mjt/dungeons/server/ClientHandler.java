@@ -10,6 +10,7 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.Scanner;
 
 import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_PLAYERS;
@@ -19,27 +20,19 @@ public class ClientHandler implements Runnable {
     private final ClientSession clientSession;
     private final GameEngine engine;
     private final Hero hero;
-    public static int clientsCount = 0;
-
     public ClientHandler(ClientSession clientSession, GameEngine engine) throws Exception {
-        clientsCount++;
-        if (clientsCount > MAX_PLAYERS) {
-            throw new Exception();
-        }
-
         this.clientSession = clientSession;
         this.engine = engine;
-        hero = new Hero(engine.getNextFreeSpawn(), "Pich", new Stats(1, 2, 3, 4), null, null);
+        hero = new Hero(engine.getNextFreeSpawn(), "Pich", new Stats(100, 200, 30, 40), null, null);
         engine.addEntity(hero);
         clientSession.changeHero(hero);
-
     }
 
     @Override
     public void run() {
         Thread.currentThread()
             .setName("Client Handler for " + clientSession.getCommandSocket().getRemoteSocketAddress());
-
+        Socket socket = clientSession.getCommandSocket();
         try (Scanner scanner = new Scanner(clientSession.getCommandSocket().getInputStream())) {
             System.out.println("Waiting for client message...");
             while (scanner.hasNext()) {
@@ -56,8 +49,8 @@ public class ClientHandler implements Runnable {
         } finally {
             try {
                 clientSession.getCommandSocket().close();
+                clientSession.getMapSocket().close();
                 engine.removeEntity(hero);
-                clientsCount--;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -67,9 +60,8 @@ public class ClientHandler implements Runnable {
 
     private void handleCommand(String inputLine) {
         Command cmd = commandBuilder(inputLine);
-        cmd.execute();
-        cmd = new PrintEntityCommand(hero, engine);
-        cmd.execute();
+        if (cmd != null)
+            cmd.execute();
     }
 
     private Command commandBuilder(String inputLine) {

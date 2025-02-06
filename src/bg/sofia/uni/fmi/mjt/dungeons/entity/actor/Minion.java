@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.dungeons.entity.actor;
 
+import bg.sofia.uni.fmi.mjt.dungeons.entity.Level;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Spell;
@@ -7,8 +8,9 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.equippable.Weapon;
 
 public class Minion extends Enemy {
     public Minion(Position pos, String name, Stats stats, Spell spell,
-                  Weapon weapon) {
+                  Weapon weapon, Level lvl) {
         super(pos, name, stats, spell, weapon);
+        level = lvl;
     }
 
     @Override

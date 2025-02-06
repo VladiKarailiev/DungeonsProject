@@ -10,6 +10,10 @@ public class Level {
         return level * EXP_CAPACITY + experience;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public Level addXP(int xp) {
         experience += xp;
         if (experience >= EXP_CAPACITY) {

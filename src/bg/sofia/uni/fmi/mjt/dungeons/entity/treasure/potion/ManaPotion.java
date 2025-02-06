@@ -13,7 +13,7 @@ public class ManaPotion extends Potion {
 
     @Override
     public void consume(Hero hero) {
-
+        hero.takeMana(amount);
         System.out.println("hero:" + hero.toString() + " consumed mana pot:" + this.toString());
     }
 

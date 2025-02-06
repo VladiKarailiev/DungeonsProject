@@ -11,12 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_PLAYERS;
+
 public class GameServer implements GameServerAPI {
 
     private static final int SERVER_PORT = 8008;
     private static final int MAX_EXECUTOR_THREADS = 20;
     private final ConcurrentHashMap<InetAddress, ClientSession> clients = new ConcurrentHashMap<>();
-
+    private int playersCount = 0;
     private GameEngine engine;
 
     @Override
@@ -41,7 +43,8 @@ public class GameServer implements GameServerAPI {
                 clients.put(clientAddress, clientSession);
                 MapUpdater mapUpdater = new MapUpdater(clientSession, engine);
                 ClientHandler clientHandler = new ClientHandler(clientSession, engine);
-
+                playersCount++;
+                if (playersCount > MAX_PLAYERS) continue;
                 executor.execute(clientHandler);
                 executor.execute(mapUpdater);
             }

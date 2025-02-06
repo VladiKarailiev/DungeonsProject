@@ -31,6 +31,6 @@ public abstract class Equippable extends Entity implements Treasure {
 
     @Override
     public String toString() {
-        return "name='" + name + '\'' + ", damage=" + damage + '}';
+        return "Weapon '" + name + '\'' + " damage=" + damage + " lvl=" + level.getLevel() + " ";
     }
 }
