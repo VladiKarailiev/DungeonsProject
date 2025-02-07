@@ -20,7 +20,7 @@ public abstract class Character extends Entity implements Actor {
 
     public Character(Position position, String name, Stats stats, Spell spell, Weapon weapon) {
         super(position);
-        if (position == null || name == null || stats == null) {
+        if (name == null || stats == null) {
             throw new IllegalArgumentException("Can't create character with null as a position/name/stats");
         }
         this.name = name;

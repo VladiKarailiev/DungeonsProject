@@ -10,7 +10,6 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Stats;
 import bg.sofia.uni.fmi.mjt.dungeons.exceptions.IllegalCommandException;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 import static bg.sofia.uni.fmi.mjt.dungeons.engine.GameEngine.MAX_ATTACK;
@@ -74,7 +73,7 @@ public class ClientHandler implements Runnable {
         cmd.execute();
     }
 
-    private Command commandBuilder(String inputLine) throws IllegalCommandException {
+    Command commandBuilder(String inputLine) throws IllegalCommandException {
         switch (inputLine) {
             case "a" -> {
                 return new MoveCommand(engine, hero, Direction.LEFT);

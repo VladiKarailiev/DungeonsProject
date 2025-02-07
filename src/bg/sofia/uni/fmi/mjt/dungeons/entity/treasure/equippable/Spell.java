@@ -4,7 +4,6 @@ import bg.sofia.uni.fmi.mjt.dungeons.entity.Level;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Position;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.Visitor;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Character;
-import bg.sofia.uni.fmi.mjt.dungeons.entity.actor.Hero;
 import bg.sofia.uni.fmi.mjt.dungeons.entity.treasure.Treasure;
 
 public class Spell extends Equippable {

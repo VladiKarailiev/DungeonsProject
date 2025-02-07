@@ -145,7 +145,7 @@ public class GameEngine {
             throw new IllegalArgumentException("Can't add null entity!");
         }
         Position pos = entity.getPos();
-        if (map[pos.x()][pos.y()] != null) throw new IllegalArgumentException("ima neshto veche tam");
+        if (map[pos.x()][pos.y()] != null) throw new IllegalArgumentException("There is something there already");
         map[pos.x()][pos.y()] = entity;
     }
 
