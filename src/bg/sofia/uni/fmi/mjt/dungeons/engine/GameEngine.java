@@ -37,6 +37,7 @@ public class GameEngine {
 
 
     private Entity[][] map = new Entity[MAP_SIZE][MAP_SIZE];
+    private Position[][] posLocks;
     private Set<Position> obstacles = new HashSet<>();
 
 
@@ -103,6 +104,17 @@ public class GameEngine {
 
     private GameEngine() {
         map = loadMap(DEFAULT_MAP_PATH);
+        posLocks = initPosLocks();
+    }
+
+    private Position[][] initPosLocks() {
+        Position[][] result = new Position[MAP_SIZE][MAP_SIZE];
+        for (int row = 0; row < MAP_SIZE; row++) {
+            for (int col = 0; col < MAP_SIZE; col++) {
+                result[row][col] = new Position(row, col);
+            }
+        }
+        return result;
     }
 
     public Position getNextFreeSpawn() throws NoSpawnPositionException {
@@ -121,15 +133,18 @@ public class GameEngine {
         if (entity == null || target == null) {
             throw new IllegalArgumentException("Arguments can't be null");
         }
-        if (!canMoveTo(target) || map[target.x()][target.y()] == entity) return;
-        if (map[target.x()][target.y()] != null) {
-            map[target.x()][target.y()].accept(entity);
+        if (!canMoveTo(target) || map[target.x()][target.y()] == entity) {
+            return;
         }
-        Position oldPos = entity.getPos();
-        entity.setPos(target);
-        map[target.x()][target.y()] = entity;
-        map[oldPos.x()][oldPos.y()] = null;
-
+        synchronized (posLocks[target.x()][target.y()]) {
+            if (map[target.x()][target.y()] != null) {
+                map[target.x()][target.y()].accept(entity);
+            }
+            Position oldPos = entity.getPos();
+            entity.setPos(target);
+            map[target.x()][target.y()] = entity;
+            map[oldPos.x()][oldPos.y()] = null;
+        }
     }
 
     private boolean canMoveTo(Position target) {
